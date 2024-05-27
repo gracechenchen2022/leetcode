@@ -6,3 +6,6 @@ class Solution:
                 return True
             hashset.add(n)
         return False
+
+        #sc:o(n)
+        #tc:o(n)
