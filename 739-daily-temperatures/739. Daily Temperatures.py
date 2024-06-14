@@ -1,15 +1,10 @@
 class Solution:
-    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        
-        n = len(temperatures)
-        answer = [0] * n
+    def dailyTemperatures(self, T: List[int]) -> List[int]:
+        res = [0]*len(T)
         stack = []
-        
-        for i in range(n - 1, -1, -1):
-            while stack and temperatures[i] >= temperatures[stack[-1]]:
-                stack.pop()
-            if stack:
-                answer[i] = stack[-1] - i
+        for i, temp in enumerate(T):
+            while stack and T[stack[-1]] < temp:#if max temp < current temp 30< 40
+                idx = stack.pop()# 0
+                res[idx] = i - idx # 1-0 = 1
             stack.append(i)
-        
-        return answer
+        return res
