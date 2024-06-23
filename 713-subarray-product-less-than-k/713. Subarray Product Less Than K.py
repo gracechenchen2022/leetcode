@@ -1,20 +1,20 @@
 class Solution:
     def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
-        
-        if k <= 1:
-            return 0
-        
-        left = 0
-        product = 1
-        result = 0
-        
-        for right in range(len(nums)):
-            product *= nums[right]
-            
-            while product >= k:
-                product //= nums[left]
-                left += 1
-            
-            result += right - left + 1
-        
-        return result
+        i,j,n,ans,p=0,0,len(nums),0,1
+        while j<n:
+            f=True
+            while i<n and p*nums[i]<k:
+                p*=nums[i]
+                i+=1
+                f=False
+            if i>j:
+                if f:
+                    if p<k:
+                        ans+=(i-j)
+                else:
+                    ans+=(i-j)
+                p=p//nums[j]
+            j+=1
+            if j>i:
+                i=j
+        return ans
