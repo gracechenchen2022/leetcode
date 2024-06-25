@@ -1,20 +1,16 @@
+from bisect import bisect_left
+from math import log
+
 class Solution:
-    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
-        i,j,n,ans,p=0,0,len(nums),0,1
-        while j<n:
-            f=True
-            while i<n and p*nums[i]<k:
-                p*=nums[i]
-                i+=1
-                f=False
-            if i>j:
-                if f:
-                    if p<k:
-                        ans+=(i-j)
-                else:
-                    ans+=(i-j)
-                p=p//nums[j]
-            j+=1
-            if j>i:
-                i=j
-        return ans
+    def numSubarrayProductLessThanK(self, nums, k):
+        if k == 0:
+            return 0
+        prefix = [log(1)]
+        ans = 0
+        for num in nums:
+            prefix.append(prefix[-1] + log(num))
+        for i, val in enumerate(prefix):
+            target = log(k) + val
+            idx = bisect_left(prefix, target)
+            ans += max(0, idx - i - 1)
+        return ans 
