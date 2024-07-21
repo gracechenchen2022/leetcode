@@ -4,7 +4,7 @@ class Codec:
         """
         encoded = ""
         return "".join(f"{len(s)}#{s}" for s in strs)
-
+#tc: o(n) sc: o(n)
     def decode(self, s: str) -> List[str]:
         """Decodes a single string to a list of strings.
         """
@@ -17,7 +17,7 @@ class Codec:
             i = j + 1 + length
         return strs
         
-
+#tc: o(m) sc: o(m)
 
 # Your Codec object will be instantiated and called as such:
 # codec = Codec()
