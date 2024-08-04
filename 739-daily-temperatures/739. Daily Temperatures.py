@@ -8,3 +8,5 @@ class Solution:
                 res[idx] = i - idx # 1-0 = 1
             stack.append(i)
         return res
+#tc:on
+#sc:on
