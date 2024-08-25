@@ -14,3 +14,6 @@ class Solution:
             patterns.update(Counter(set(combinations(sites, 3))))
         # 返回出现次数最多的三网站组合，如果有多个，按字母顺序返回最小的
         return max(sorted(patterns), key=patterns.get)
+
+
+
