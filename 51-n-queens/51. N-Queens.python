@@ -1,0 +1,37 @@
+class Solution(object):
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
+        
+        def backtrack(path):
+            if len(path) == n:
+                result.append(generate_board(path))  # 生成棋盘格式的解法
+                return 
+            for i in range(n):
+                if valid(path, i):
+                    path.append(i)
+                    backtrack(path)
+                    path.pop()
+
+        def valid(path, column):
+            row = len(path)
+            for i in range(row):
+                # 检查同列和对角线的冲突
+                if path[i] == column or abs(path[i] - column) == row - i:  
+                    return False
+            return True
+
+        def generate_board(path):
+            # 根据 path 生成 n×n 的棋盘表示
+            board = []
+            for i in range(n):
+                row = ['.'] * n
+                row[path[i]] = 'Q'  # 把第 i 行的皇后位置设为 'Q'
+                board.append(''.join(row))
+            return board
+
+        result = []  # 用于存储所有棋盘解法
+        backtrack([])  
+        return result
