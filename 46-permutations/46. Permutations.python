@@ -1,0 +1,23 @@
+class Solution(object):
+    def permute(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+
+        res = []
+
+        def backtrack(path):
+            # 当路径长度等于数组长度时，说明找到一个完整的排列
+            if len(path) == len(nums):
+                res.append(path[:])  # 将当前排列的拷贝加入结果集中
+                
+
+            for i in nums:
+                if i not in path:  # 如果当前元素不在排列路径中
+                    path.append(i)  # 将元素加入路径
+                    backtrack(path)  # 继续递归，寻找下一个元素
+                    path.pop()  # 回溯，撤销选择
+        
+        backtrack([])  # 初始路径为空
+        return res
