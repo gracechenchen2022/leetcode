@@ -1,0 +1,27 @@
+class Solution(object):
+    def totalNQueens(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        
+        def backtrack(path):
+            if len(path) == n:
+                result.append(path[:]) 
+                return 
+            for i in range(n):
+                if valid(path, i):
+                    path.append(i)
+                    backtrack(path)
+                    path.pop()
+
+        def valid(path, column):
+            row = len(path)
+            for i in range(row):
+                if path[i] == column or abs(path[i] - column) == row - i:  
+                    return False
+            return True
+
+        result = []  
+        backtrack([])  
+        return len(result)  
