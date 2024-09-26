@@ -4,20 +4,39 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[int]
         """
-        count_map = {}
-        n = len(nums)
-        result = []
-    
-        # 统计每个元素的出现次数
-        for num in nums:
-            if num in count_map:
-                count_map[num] += 1
-            else:
-                count_map[num] = 1
+        if not nums:
+            return []
         
-        # 找出出现次数超过 n // 3 的元素
-        for num, count in count_map.items():
-            if count > n // 3:
-                result.append(num)
+        # 初始化两个候选人和他们的计数器
+        candidate1, candidate2, count1, count2 = None, None, 0, 0
+        
+        # 第一次遍历，找到两个候选人
+        for num in nums:
+            if candidate1 == num:
+                count1 += 1
+            elif candidate2 == num:
+                count2 += 1
+            elif count1 == 0:
+                candidate1, count1 = num, 1
+            elif count2 == 0:
+                candidate2, count2 = num, 1
+            else:
+                count1 -= 1
+                count2 -= 1
+        
+        # 第二次遍历，验证这两个候选人是否真的超过了 n/3 的次数
+        result = []
+        count1, count2 = 0, 0
+        for num in nums:
+            if num == candidate1:
+                count1 += 1
+            elif num == candidate2:
+                count2 += 1
+        
+        n = len(nums)
+        if count1 > n // 3:
+            result.append(candidate1)
+        if count2 > n // 3:
+            result.append(candidate2)
         
         return result
