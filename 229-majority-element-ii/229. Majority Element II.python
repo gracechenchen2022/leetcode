@@ -1,0 +1,23 @@
+class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        count_map = {}
+        n = len(nums)
+        result = []
+    
+        # 统计每个元素的出现次数
+        for num in nums:
+            if num in count_map:
+                count_map[num] += 1
+            else:
+                count_map[num] = 1
+        
+        # 找出出现次数超过 n // 3 的元素
+        for num, count in count_map.items():
+            if count > n // 3:
+                result.append(num)
+        
+        return result
