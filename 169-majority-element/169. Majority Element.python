@@ -1,0 +1,9 @@
+class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)//2
+        count = Counter(nums)
+        return max(count, key = count.get)
