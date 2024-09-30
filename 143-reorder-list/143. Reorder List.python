@@ -1,0 +1,40 @@
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution(object):
+    def reorderList(self, head):
+        """
+        :type head: ListNode
+        :rtype: None. Do not return anything, modify head in-place instead.
+        """
+        if not head or not head.next:
+            return
+        
+        # Step 1: 使用快慢指针找到链表的中点
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        
+        # Step 2: 反转后半部分链表
+        prev, curr = None, slow
+        while curr:
+            next_temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_temp
+        
+        # Step 3: 交替合并前半部分和反转后的后半部分
+        first, second = head, prev
+        while second.next:
+            # 保存下一步要处理的节点
+            tmp1, tmp2 = first.next, second.next
+            # 交替连接
+            first.next = second
+            second.next = tmp1
+            # 移动指针
+            first = tmp1
+            second = tmp2
