@@ -1,0 +1,100 @@
+from collections import defaultdict
+
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.freq = 1  # 初始频率为 1
+        self.prev = None
+        self.next = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = Node(None, None)  # 虚拟头节点
+        self.tail = Node(None, None)  # 虚拟尾节点
+        self.head.next = self.tail
+        self.tail.prev = self.head
+    
+    def append(self, node):
+        """将节点插入到双向链表的尾部"""
+        node.prev = self.tail.prev
+        node.next = self.tail
+        self.tail.prev.next = node
+        self.tail.prev = node
+    
+    def pop(self, node=None):
+        """删除并返回双向链表中的节点，默认删除第一个节点（最少使用）"""
+        if self.head.next == self.tail:
+            return None  # 链表为空
+        if not node:
+            node = self.head.next  # 默认删除头部后第一个节点
+        node.prev.next = node.next
+        node.next.prev = node.prev
+        return node
+    
+    def is_empty(self):
+        return self.head.next == self.tail
+
+class LFUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.capacity = capacity
+        self.size = 0
+        self.min_freq = 0
+        self.nodes = {}  # 存储key到Node的映射
+        self.freq_map = defaultdict(DoublyLinkedList)  # 存储频率到双向链表的映射
+
+    def _update(self, node):
+        """更新节点的频率并移动到新频率对应的链表"""
+        freq = node.freq
+        self.freq_map[freq].pop(node)  # 从当前频率链表中移除节点
+        
+        # 如果当前频率链表为空并且它是最小频率，更新最小频率
+        if self.freq_map[freq].is_empty() and self.min_freq == freq:
+            self.min_freq += 1
+        
+        # 更新节点的频率
+        node.freq += 1
+        # 将节点插入到新频率对应的链表尾部
+        self.freq_map[node.freq].append(node)
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        if key not in self.nodes:
+            return -1
+        node = self.nodes[key]
+        self._update(node)  # 更新节点的频率
+        return node.value
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: None
+        """
+        if self.capacity == 0:
+            return
+        
+        if key in self.nodes:
+            node = self.nodes[key]
+            node.value = value  # 更新节点值
+            self._update(node)  # 更新节点频率
+        else:
+            if self.size == self.capacity:
+                # 需要移除最少频率的节点
+                node_to_remove = self.freq_map[self.min_freq].pop()
+                del self.nodes[node_to_remove.key]
+                self.size -= 1
+            
+            # 创建新节点
+            new_node = Node(key, value)
+            self.nodes[key] = new_node
+            self.freq_map[1].append(new_node)  # 新节点频率为 1
+            self.min_freq = 1  # 最小频率重置为 1
+            self.size += 1
