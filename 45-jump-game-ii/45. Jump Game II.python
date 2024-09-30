@@ -1,0 +1,27 @@
+class Solution(object):
+    def jump(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        maxReach = 0
+        currentJumpEnd = 0
+        count = 0
+
+        # 如果数组长度为1，已经在终点，不需要跳跃
+        if len(nums) == 1:
+            return 0
+
+        for i in range(len(nums) - 1):
+            maxReach = max(maxReach, i + nums[i])  # 更新可以到达的最远距离
+
+            # 如果到达了当前跳跃的边界
+            if i == currentJumpEnd:
+                count += 1  # 必须进行一次跳跃
+                currentJumpEnd = maxReach  # 更新跳跃的边界
+                
+                # 如果可以到达或超过最后一个位置，直接返回跳跃次数
+                if currentJumpEnd >= len(nums) - 1:
+                    return count
+
+        return count
