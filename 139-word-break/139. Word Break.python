@@ -1,0 +1,19 @@
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        word_set = set(wordDict)  # 使用集合加速查找
+        dp = [False] * (len(s) + 1)
+        dp[0] = True  # 空字符串可以被拆分
+        
+        for i in range(1, len(s) + 1):
+            for j in range(i):
+                # 如果 dp[j] 为 True，并且 s[j:i] 在字典中
+                if dp[j] and s[j:i] in word_set:
+                    dp[i] = True
+                    break  # 提前跳出，避免不必要的计算
+        
+        return dp[len(s)]
