@@ -1,0 +1,51 @@
+from collections import defaultdict, deque
+
+class Solution(object):
+    def findLadders(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: List[List[str]]
+        """
+        wordList = set(wordList)
+        if endWord not in wordList:
+            return []
+        
+        # Step 1: BFS to build the predecessor graph
+        layer = {beginWord: [[beginWord]]}
+        wordList.add(endWord)  # Ensure the endWord is part of the wordList
+        adj_list = defaultdict(list)  # To store the predecessor relationships
+        found = False
+        current_level = {beginWord}
+        
+        while current_level and not found:
+            next_level = set()
+            for word in current_level:
+                wordList.discard(word)  # Remove the word from the wordList to avoid revisiting
+            for word in current_level:
+                for i in range(len(word)):
+                    for c in 'abcdefghijklmnopqrstuvwxyz':
+                        new_word = word[:i] + c + word[i+1:]
+                        if new_word in wordList:
+                            if new_word == endWord:
+                                found = True
+                            next_level.add(new_word)
+                            adj_list[new_word].append(word)
+            current_level = next_level
+        
+        # If the endWord was not found, return an empty list
+        if not found:
+            return []
+        
+        # Step 2: Use DFS to construct all paths
+        def dfs(word):
+            if word == beginWord:
+                return [[beginWord]]
+            paths = []
+            for prev in adj_list[word]:
+                for path in dfs(prev):
+                    paths.append(path + [word])
+            return paths
+        
+        return dfs(endWord)
