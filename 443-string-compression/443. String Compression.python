@@ -1,0 +1,29 @@
+class Solution(object):
+    def compress(self, chars):
+        """
+        :type chars: List[str]
+        :rtype: int
+        """
+        write = 0  # 写指针，记录压缩后字符写入位置
+        i = 0  # 读指针，用于遍历字符数组
+        
+        while i < len(chars):
+            char = chars[i]  # 当前字符
+            count = 0  # 统计当前字符的出现次数
+            
+            # 统计连续相同字符的数量
+            while i < len(chars) and chars[i] == char:
+                count += 1
+                i += 1
+            
+            # 写入当前字符
+            chars[write] = char
+            write += 1
+            
+            # 如果字符出现的次数大于 1，写入次数
+            if count > 1:
+                for c in str(count):
+                    chars[write] = c
+                    write += 1
+        
+        return write  # 返回压缩后的字符长度
