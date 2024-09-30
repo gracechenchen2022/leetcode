@@ -1,0 +1,42 @@
+# Definition for a Node.
+class Node:
+    def __init__(self, x, next=None, random=None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+class Solution(object):
+    def copyRandomList(self, head):
+        """
+        :type head: Node
+        :rtype: Node
+        """
+        if not head:
+            return None  # 如果链表为空，直接返回 None
+        
+        # 第一步：遍历原链表，在每个节点后面插入一个新节点
+        current = head
+        while current:
+            new_node = Node(current.val)  # 创建一个新节点，其值与当前节点相同
+            new_node.next = current.next  # 新节点的 next 指针指向当前节点的 next
+            current.next = new_node       # 将新节点插入到当前节点后面
+            current = new_node.next       # 移动到下一个原节点
+        
+        # 第二步：为新节点设置 random 指针
+        current = head
+        while current:
+            if current.random:  # 如果当前节点的 random 指针不为空
+                current.next.random = current.random.next  # 设置新节点的 random 为原节点 random 指针指向节点的下一个节点
+            current = current.next.next  # 移动到下一个原节点（跳过新节点）
+        
+        # 第三步：将原链表与新链表分离
+        current = head
+        new_head = head.next  # 新链表的头节点，即第一个新节点
+        while current:
+            new_node = current.next  # 当前节点的下一个节点是新节点
+            current.next = new_node.next  # 恢复原链表的 next 指针
+            if new_node.next:  # 如果还有下一个新节点，则调整新链表的 next 指针
+                new_node.next = new_node.next.next
+            current = current.next  # 移动到下一个原节点
+        
+        return new_head  # 返回新链表的头节点
