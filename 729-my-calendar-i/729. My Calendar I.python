@@ -1,0 +1,21 @@
+class MyCalendar(object):
+
+    def __init__(self):
+        # 用一个列表来存储所有已经预订的时间段
+        self.bookings = []
+
+    def book(self, start, end):
+        """
+        :type start: int
+        :type end: int
+        :rtype: bool
+        """
+        # 遍历所有已预订的时间段，检查是否有重叠
+        for s, e in self.bookings:
+            # 判断是否有冲突：时间段 [start, end) 和 [s, e) 冲突的条件
+            if max(s, start) < min(e, end):
+                return False  # 有冲突，返回 False
+        
+        # 如果没有冲突，添加新预订
+        self.bookings.append((start, end))
+        return True  # 预订成功，返回 True
