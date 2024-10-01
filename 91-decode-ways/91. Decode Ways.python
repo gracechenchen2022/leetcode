@@ -1,0 +1,26 @@
+class Solution(object):
+    def numDecodings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        if not s or s[0] == '0':
+            return 0
+        
+        # 动态规划数组
+        n = len(s)
+        dp = [0] * (n + 1)
+        dp[0] = 1  # 空字符串有一种解码方式
+        dp[1] = 1  # s[0] 不为 0，必定有一种解码方式
+        
+        for i in range(2, n + 1):
+            # 单字符解码（必须非零）
+            if s[i-1] != '0':
+                dp[i] += dp[i-1]
+            
+            # 双字符解码（需要在 10 到 26 之间）
+            two_digit = int(s[i-2:i])
+            if 10 <= two_digit <= 26:
+                dp[i] += dp[i-2]
+        
+        return dp[n]
