@@ -1,0 +1,55 @@
+class Solution(object):
+    def findWords(self, board, words):
+        """
+        :type board: List[List[str]]
+        :type words: List[str]
+        :rtype: List[str]
+        """
+        # 构建前缀树（Trie）
+        trie = {}
+        for word in words:
+            node = trie
+            for char in word:
+                if char not in node:
+                    node[char] = {}
+                node = node[char]
+            node['#'] = word  # '#' 标记单词的结尾，并存储完整的单词
+        
+        # 初始化变量
+        result = []
+        m, n = len(board), len(board[0])
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # 四个方向：右、下、左、上
+
+        # 回溯函数
+        def backtrack(i, j, parent):
+            letter = board[i][j]
+            curr_node = parent[letter]
+
+            # 检查是否找到了单词
+            if '#' in curr_node:
+                result.append(curr_node['#'])  # 将完整单词加入结果集
+                del curr_node['#']  # 防止重复加入结果
+
+            # 标记当前格子为已访问
+            board[i][j] = '#'
+
+            # 向四个方向探索
+            for di, dj in directions:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < m and 0 <= nj < n and board[ni][nj] in curr_node:
+                    backtrack(ni, nj, curr_node)
+
+            # 恢复当前格子的状态
+            board[i][j] = letter
+
+            # 优化：剪枝，移除不再需要的节点
+            if not curr_node:
+                parent.pop(letter)
+
+        # 从每个格子开始回溯
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] in trie:
+                    backtrack(i, j, trie)
+
+        return result
