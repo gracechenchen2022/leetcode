@@ -1,0 +1,19 @@
+from collections import Counter
+class Solution(object):
+    
+    def leastInterval(self, tasks, n):
+        # 统计每个任务的出现次数
+        task_counts = Counter(tasks)
+        max_count = max(task_counts.values())
+        
+        # 计算最多任务出现次数的任务数量
+        max_count_tasks = list(task_counts.values()).count(max_count)
+        
+        # 计算最终所需的最短时间
+        part_count = max_count - 1  # 任务分块，去掉最后一组
+        part_length = n - (max_count_tasks - 1)  # 每个部分中可用插入的空位
+        empty_slots = part_count * part_length  # 计算总的空闲位置
+        available_tasks = len(tasks) - max_count * max_count_tasks  # 还剩下的可用任务
+        idles = max(0, empty_slots - available_tasks)  # 计算待命的次数
+        
+        return len(tasks) + idles
