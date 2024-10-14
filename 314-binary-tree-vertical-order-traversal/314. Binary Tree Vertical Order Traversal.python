@@ -18,3 +18,6 @@ class Solution(object):
                 cols[i].append(node.val)
                 queue += (node.left, i - 1), (node.right, i + 1)
         return [cols[i] for i in sorted(cols)]
+
+#时间复杂度：O(N log N)，其中 N 是树中节点的数量。
+#空间复杂度：O(N)，因为我们需要存储 N 个节点的信息。
