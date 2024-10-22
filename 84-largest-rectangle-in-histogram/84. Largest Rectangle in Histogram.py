@@ -14,3 +14,7 @@ class Solution:
             stack.append(i)
 
         return max_area
+
+
+#tc：on
+#sc: on
