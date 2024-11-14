@@ -6,5 +6,5 @@ class Solution:
             heapq.heappush(heap,(val, key))
             if len(heap) > k:
                 heapq.heappop(heap)
-        top_k = [key for val, key in heap]
+            top_k = [key for val, key in heap]
         return top_k
